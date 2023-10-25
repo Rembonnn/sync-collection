@@ -42,7 +42,7 @@ class SyncLogic
      */
     private function oldCollection(Collection $collection, $callback = null)
     {
-        if (!empty($query)) {
+        if (!is_null($callback)) {
             $callback($collection);
 
             return $collection;
@@ -60,7 +60,7 @@ class SyncLogic
      */
     private function newCollection(Collection $collection, $callback = null)
     {
-        if (!empty($query)) {
+        if (!is_null($callback)) {
             $callback($collection);
 
             return $collection;

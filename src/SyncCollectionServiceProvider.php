@@ -3,6 +3,7 @@
 namespace Rembon\SyncCollection;
 
 use Illuminate\Support\ServiceProvider;
+use Rembon\SyncCollection\Logic\SyncLogic;
 
 class SyncCollectionServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,9 @@ class SyncCollectionServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind('sync_collection', function () {
+            return new SyncLogic();
+        });
     }
 
     /**

@@ -13,6 +13,6 @@ class SyncCollection extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'sync-collection';
+        return 'sync_collection';
     }
 }

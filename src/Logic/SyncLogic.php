@@ -3,35 +3,33 @@
 namespace Rembon\SyncCollection\Logic;
 
 use Illuminate\Support\Collection;
+use LogicException;
 
 class SyncLogic
 {
     /**
-     * Get the Old Collection Data
+     * Process the Between Old and New Collection With Key
      *
-     * @var Collection
+     * @param Collection $oldCollection
+     * @param Collection $newCollection
+     * @param array $key
      */
-    protected $oldCollectionData;
-
-    /**
-     * Get the New Collection Data
-     *
-     * @var Collection
-     */
-    protected $newCollectionData;
-
-    /**
-     * Instantiate the Constructor of Sync Logic Class
-     *
-     * @param Collection $oldCollectionData
-     * @param Collection $newCollectionData
-     * @return void
-     */
-    public function __construct(Collection $oldCollectionData, Collection $newCollectionData)
+    public function withBetweenSingular(Collection $oldCollection, Collection $newCollection, array $key)
     {
-        $this->oldCollectionData = $oldCollectionData;
-        $this->newCollectionData = $newCollectionData;
+        foreach($key as $index) {
+            if (!array_key_exists($index, $oldCollection->toArray())) {
+                throw new LogicException("Key To Protect Not Exists Inside Old Collection");
+            }
+
+            $newCollection->prepend(null, $index);
+        }
+
+        return $oldCollection->map(function ($item, $key) use ($newCollection) {
+            return $newCollection[$key] ?? $item;
+        });
     }
+
+    /** */
 
     /**
      * Process the Old Collection Data
@@ -40,7 +38,7 @@ class SyncLogic
      * @param $callback
      * @return Collection
      */
-    private function oldCollection(Collection $collection, $callback = null)
+    public function oldCollection(Collection $collection, $callback = null)
     {
         if (!is_null($callback)) {
             $callback($collection);
@@ -58,7 +56,7 @@ class SyncLogic
      * @param $callback
      * @return Collection
      */
-    private function newCollection(Collection $collection, $callback = null)
+    public function newCollection(Collection $collection, $callback = null)
     {
         if (!is_null($callback)) {
             $callback($collection);
@@ -75,7 +73,7 @@ class SyncLogic
      * @param array $key
      * @return array
      */
-    private function uniqueArrayKey(array $key)
+    public function uniqueArrayKey(array $key)
     {
         return array_unique($key);
     }

@@ -1,0 +1,19 @@
+{
+    "name": "rembon/sync-collection",
+    "description": "Sync Between Old and New Laravel Data Collection",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Rembon\\SyncCollection\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dayCod",
+            "email": "alayarahman07@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

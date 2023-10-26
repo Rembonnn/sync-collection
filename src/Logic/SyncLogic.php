@@ -44,22 +44,23 @@ class SyncLogic
     /**
      * Process the Between Old and New Many Collection With Key
      *
-     * @param Collection $old_collection
-     * @param Collection $new_collection
+     * @param Collection|Model $old_collection
+     * @param Collection|Model $new_collection
      * @param string $unique_key
      * @param array $columns_to_merge
      *
      * @return Collection|array
      */
     public function withManyBetween(
-        Collection $old_collection,
-        Collection $new_collection,
+        Collection|Model $old_collection,
+        Collection|Model $new_collection,
         string $unique_key = "",
         array $columns_to_merge = []
     ) {
         $merged_data = $old_collection->concat($new_collection);
         // dd($merged_data);
         $synced_data = $merged_data->groupBy($unique_key)->map(function ($items, $index) use ($columns_to_merge) {
+            $columns_to_merge = $this->uniqueArrayKey($columns_to_merge);
             return $items->reduce(function ($carry, $item) use ($columns_to_merge) {
                 $merged_item = ['id' => $carry['id'] ?? $item['id'] ?? null];
                 foreach ($columns_to_merge as $column) {

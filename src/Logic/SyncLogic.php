@@ -3,68 +3,74 @@
 namespace Rembon\SyncCollection\Logic;
 
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use LogicException;
 
 class SyncLogic
 {
     /**
-     * Process the Between Old and New Collection With Key
+     * Process the Between Old and New Singular Collection With Key
      *
-     * @param Collection $oldCollection
-     * @param Collection $newCollection
+     * @param Collection|EloquentCollection|Model $old_collection
+     * @param Collection|EloquentCollection|Model $new_collection
      * @param array $key
+     *
+     * @return Collection|array
      */
-    public function withBetweenSingular(Collection $oldCollection, Collection $newCollection, array $key)
-    {
-        foreach($key as $index) {
-            if (!array_key_exists($index, $oldCollection->toArray())) {
+    public function withSingleBetween(
+        Collection|EloquentCollection|Model $old_collection,
+        Collection|EloquentCollection|Model $new_collection,
+        array $key = []
+    ) {
+        foreach ($this->uniqueArrayKey($key) as $index) {
+            if (!array_key_exists($index, $old_collection->toArray())) {
                 throw new LogicException("Key To Protect Not Exists Inside Old Collection");
             }
 
-            $newCollection->prepend(null, $index);
+            $new_collection->prepend(null, $index);
         }
 
-        return $oldCollection->map(function ($item, $key) use ($newCollection) {
-            return $newCollection[$key] ?? $item;
+        if ($old_collection instanceof Model || $new_collection instanceof Model) {
+            $old_collection = collect($old_collection->toArray());
+            $new_collection = collect($new_collection->toArray());
+        }
+
+        return $old_collection->map(function ($item, $key) use ($new_collection) {
+            return $new_collection[$key] ?? $item;
         });
     }
 
-    /** */
-
     /**
-     * Process the Old Collection Data
+     * Process the Between Old and New Many Collection With Key
      *
-     * @param Collection $collection
-     * @param $callback
-     * @return Collection
-     */
-    public function oldCollection(Collection $collection, $callback = null)
-    {
-        if (!is_null($callback)) {
-            $callback($collection);
-
-            return $collection;
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Process the New Collection Data
+     * @param Collection $old_collection
+     * @param Collection $new_collection
+     * @param string $unique_key
+     * @param array $columns_to_merge
      *
-     * @param Collection $collection
-     * @param $callback
-     * @return Collection
+     * @return Collection|array
      */
-    public function newCollection(Collection $collection, $callback = null)
-    {
-        if (!is_null($callback)) {
-            $callback($collection);
+    public function withManyBetween(
+        Collection $old_collection,
+        Collection $new_collection,
+        string $unique_key = "",
+        array $columns_to_merge = []
+    ) {
+        $merged_data = $old_collection->concat($new_collection);
+        // dd($merged_data);
+        $synced_data = $merged_data->groupBy($unique_key)->map(function ($items, $index) use ($columns_to_merge) {
+            return $items->reduce(function ($carry, $item) use ($columns_to_merge) {
+                $merged_item = ['id' => $carry['id'] ?? $item['id'] ?? null];
+                foreach ($columns_to_merge as $column) {
+                    $merged_item[$column] = max($carry[$column] ?? 0, $item[$column]);
+                }
 
-            return $collection;
-        }
+                return $merged_item;
+            }, []);
+        })->values();
 
-        return $collection;
+        return $synced_data;
     }
 
     /**

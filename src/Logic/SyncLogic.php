@@ -58,7 +58,6 @@ class SyncLogic
         array $columns_to_merge = []
     ) {
         $merged_data = $old_collection->concat($new_collection);
-        // dd($merged_data);
         $synced_data = $merged_data->groupBy($unique_key)->map(function ($items, $index) use ($columns_to_merge) {
             $columns_to_merge = $this->uniqueArrayKey($columns_to_merge);
             return $items->reduce(function ($carry, $item) use ($columns_to_merge) {

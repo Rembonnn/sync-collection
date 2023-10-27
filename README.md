@@ -30,7 +30,7 @@ use Rembon\SyncCollection\SyncCollection;
 ### Build Collection Services
 Dipakai untuk manipulasi Collection dengan menggunakan nilai daripada Collection itu sendiri
 ```php
-BuildCollection::set($collection, $callback)
+BuildCollection::set(Collection $collection, Builder $callback)
 ```
 
 ### Sync Singular Data Collection

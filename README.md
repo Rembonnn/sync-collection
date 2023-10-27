@@ -45,6 +45,19 @@ Dipakai untuk Sinkronisasi Kedua Collection yang `Multi Dimensional`
 SyncCollection::withMultiDimensionBetween(Collection $old_collection, Collection $new_collection, string $unique_key);
 ```
 
+## Examples
+Berikut adalah contoh penggunaan kasusnya.
+
+### Build Collection Services
+Untuk Build Collection dapat digunakan untuk penggunaan Advance, Berikut adalah Contoh Sederhana untuk proses mapping data Collection
+```php
+BuildCollection::set($oldData, function ($item) {
+    return $item->map(function ($val, $key) {
+        return $val['quantity'] > 20;
+    });
+})
+```
+
 ## Credits
 - [Rembon Karya Digital](https://github.com/rembonnn)
 - [DayCod](https://github.com/dayCod)

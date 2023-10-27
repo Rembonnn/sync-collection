@@ -20,8 +20,30 @@ Buka file Config/app.php, Lalu Pastekan syntax berikut pada bagian Autoload Serv
 ])->toArray(),
 ```
 
-## Usage Examples
+## How to Use
+Pastikan anda mengimport kedua class berikut
+```php
+use Rembon\SyncCollection\Services\BuildCollection;
+use Rembon\SyncCollection\SyncCollection;
+```
 
+### Build Collection Services
+Dipakai untuk manipulasi Collection dengan menggunakan nilai daripada Collection itu sendiri
+```php
+BuildCollection::set($collection, $callback)
+```
+
+### Sync Singular Data Collection
+Dipakai untuk Sinkronisasi Kedua Collection yang `singular`
+```php
+SyncCollection::withSingleBetween(Collection $old_collection, Collection $new_collection);
+```
+
+### Sync Multi Dimensional Data Collection
+Dipakai untuk Sinkronisasi Kedua Collection yang `Multi Dimensional`
+```php
+SyncCollection::withMultiDimensionBetween(Collection $old_collection, Collection $new_collection, string $unique_key);
+```
 
 ## Credits
 - [Rembon Karya Digital](https://github.com/rembonnn)

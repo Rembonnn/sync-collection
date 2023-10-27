@@ -4,7 +4,6 @@ namespace Rembon\SyncCollection\Logic;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use LogicException;
 
@@ -27,15 +26,15 @@ class SyncLogic
     /**
      * Process the Between Old and New Singular Collection With Key
      *
-     * @param Collection|EloquentCollection|Model $old_collection
-     * @param Collection|EloquentCollection|Model $new_collection
+     * @param Collection|Model $old_collection
+     * @param Collection|Model $new_collection
      * @param array $key
      *
      * @return Collection|array
      */
     public function withSingleBetween(
-        Collection|EloquentCollection|Model $old_collection,
-        Collection|EloquentCollection|Model $new_collection,
+        Collection|Model $old_collection,
+        Collection|Model $new_collection,
         array $key = []
     ) {
         foreach ($this->uniqueArrayKey($key) as $index) {

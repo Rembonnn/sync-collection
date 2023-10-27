@@ -69,8 +69,7 @@ class SyncLogic
     public function withMultiDimensionBetween(
         Collection|Model $old_collection,
         Collection|Model $new_collection,
-        string $unique_key = "",
-        array $columns_to_merge = []
+        string $unique_key = ""
     ) {
         $merge_old_new_collection = $old_collection->concat($new_collection);
         $merge_old_new_collection->each(function ($item, $key) use ($unique_key) {

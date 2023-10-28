@@ -98,8 +98,69 @@ Akan menghasilkan data seperti berikut ini:
 ### Sync Associative Data Collection
 Sinkronisasi Untuk Associative Data Collection
 ```php
+// Data lama
+$oldData = collect([
+    ['id' => 1, 'name' => 'Item 1', 'quantity' => 10],
+    ['id' => 2, 'name' => 'Item 2', 'quantity' => 20],
+    ['id' => 3, 'name' => 'Item 3', 'quantity' => 30],
+]);
 
+// Data baru
+$newData = collect([
+    ['id' => 1, 'name' => 'New Item', 'quantity' => 15],
+    ['name' => 'Another New Item', 'quantity' => 25],
+    ['name' => 'Another New Items 2', 'quantity' => 250],
+]);
+
+return SyncCollection::withAssociativeBetween($oldData, $newData, 'id');
 ```
+
+Berikut Adalah hasil daripada Sinkronisasi Associative Data Collection:
+```php
+[
+    "currents" => [
+        [
+          "id" => 2, 
+          "name" => "Item 2",
+          "quantity" => 20
+        ],
+        [
+          "id" => 3,
+          "name" => "Item 3",
+          "quantity" => 30
+        ]
+    ],
+    "appends" => [
+        [
+           "name" => "Another New Item",
+           "quantity" => 25
+        ],
+        [
+           "name" => "Another New Items 2",
+           "quantity" => 250
+        ]
+    ],
+    "olds" => [
+        [
+           "id" => 1,
+           "name" => "Item 1",
+           "quantity" => 10
+        ]
+    ],
+    "updated" => [
+        [
+           "id" => 1
+           "name" => "New Item"
+           "quantity" => 15
+        ]
+    ]
+]
+```
+#### Notes
+- `currents` data yang tidak ada perubahan baik sebelum atau sesudah ada request.
+- `appends` data baru yang tidak ada dalam data sebelumnya.
+- `olds` data lama yang sudah tidak terpakai.
+- `updated` data baru yang menggantikan data lama yang sudah tidak terpakai.
 
 ## Credits
 - [Rembon Karya Digital](https://github.com/rembonnn)

@@ -3,7 +3,7 @@ Sebuah Package untuk Sinkronisasi Data Collection.
 
 ## Features
 - Sync Untuk Dua Data Collection (Singular)
-- Sync Untuk Dua Data Collection (Multi Dimensi)
+- Sync Untuk Dua Data Collection (Dua Dimensi / Asosiatif)
 
 ## Installation
 Installasi Via Composer
@@ -36,13 +36,13 @@ BuildCollection::set(Collection $collection, Builder $callback)
 ### Sync Singular Data Collection
 Dipakai untuk Sinkronisasi Kedua Collection yang `singular`
 ```php
-SyncCollection::withSingleBetween(Collection $old_collection, Collection $new_collection);
+SyncCollection::withSingleBetween(Collection $old_collection, Collection $new_collection, array $unique_key_to_protect);
 ```
 
-### Sync Multi Dimensional Data Collection
-Dipakai untuk Sinkronisasi Kedua Collection yang `Multi Dimensional`
+### Sync Associative Data Collection
+Dipakai untuk Sinkronisasi Kedua Collection yang `associative`
 ```php
-SyncCollection::withMultiDimensionBetween(Collection $old_collection, Collection $new_collection, string $unique_key);
+SyncCollection::withAssociativeBetween(Collection $old_collection, Collection $new_collection, string $unique_key);
 ```
 
 ## Examples
@@ -58,7 +58,53 @@ BuildCollection::set($oldData, function ($item) {
 })
 ```
 
+Akan Menghasilkan Hasil Seperti berikut Ini:
+```php
+[
+    0 => false,
+    1 => false,
+    2 => true
+]
+```
+
+### Sync Singular Data Collection
+Sinkronisasi Untuk Singular Data Collection
+```php
+// Data Lama Singular
+$old_data = collect([
+    'id' => 1,
+    'name' => 'item 1',
+    'quantity' => 10,
+]);
+
+// Data Baru Singular
+$new_data = collect([
+    'name' => 'New Item 1',
+    'quantity' => 100,
+]);
+
+return SyncCollection::withSingleBetween($old_data, $new_data, ['id']);
+```
+
+Akan menghasilkan data seperti berikut ini:
+```php
+[
+    "id" => 1,
+    "name" => "New Item 1",
+    "quantity" => 100
+]
+```
+
+### Sync Associative Data Collection
+Sinkronisasi Untuk Associative Data Collection
+```php
+
+```
+
 ## Credits
 - [Rembon Karya Digital](https://github.com/rembonnn)
 - [DayCod](https://github.com/dayCod)
 - [See All Contributors](https://github.com/rembonnn/sync-collection/contributors)
+
+## References
+- [Laravel Collection Available Methods](https://laravel.com/docs/10.x/collections#available-methods)

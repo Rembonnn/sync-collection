@@ -56,7 +56,7 @@ class SyncLogic
     }
 
     /**
-     * Process the Between Old and New Many Collection With Key
+     * Process the Between Old and New Associative Collection With Key
      *
      * @param Collection|Model $old_collection
      * @param Collection|Model $new_collection
@@ -65,7 +65,7 @@ class SyncLogic
      *
      * @return Collection|array
      */
-    public function withMultiDimensionBetween(
+    public function withAssociativeBetween(
         Collection|Model $old_collection,
         Collection|Model $new_collection,
         string $unique_key = ""

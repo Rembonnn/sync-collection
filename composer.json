@@ -3,7 +3,7 @@
     "description": "Sync Between Old and New Laravel Data Collection",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.1",
+    "version": "v1.0.1",
     "autoload": {
         "psr-4": {
             "Rembon\\SyncCollection\\": "src/"

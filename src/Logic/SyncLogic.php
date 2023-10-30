@@ -72,6 +72,8 @@ class SyncLogic
     ) {
         $merge_old_new_collection = $old_collection->concat($new_collection);
         $merge_old_new_collection->each(function ($item, $key) use ($unique_key) {
+            if($item instanceof Model) $item = $item->toArray();
+            
             in_array($unique_key, array_keys($item))
                 ? array_push($this->currents, $item)
                 : array_push($this->appends, $item);
